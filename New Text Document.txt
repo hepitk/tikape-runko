@@ -1,0 +1,23 @@
+
+CREATE TABLE Annos (
+    id integer PRIMARY KEY,
+    nimi varchar(100)
+);
+
+CREATE TABLE RaakaAine (
+    id integer PRIMARY KEY,
+    nimi varchar(100)
+);
+
+CREATE TABLE AnnosRaakaAine (
+    annos_id integer,
+    raaka_aine_id integer,
+    FOREIGN KEY (annos_id) REFERENCES Annos(id),
+    FOREIGN KEY (raaka_aine_id) REFERENCES RaakaAine(id),    
+    jarjestys integer,
+    maara varchar(20),
+    ohje varchar(500)
+);
+
+
+	
