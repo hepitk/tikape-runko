@@ -6,9 +6,13 @@ import spark.ModelAndView;
 import spark.Spark;
 import static spark.Spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
+import tikape.runko.database.AnnosDao;
 import tikape.runko.database.Database;
 import tikape.runko.database.RaakaAineDao;
+import tikape.runko.database.AnnosRaakaAineDao;
+import tikape.runko.domain.Annos;
 import tikape.runko.domain.RaakaAine;
+import tikape.runko.domain.AnnosRaakaAine;
 
 public class Main {
 
@@ -16,47 +20,69 @@ public class Main {
         Database database = new Database("jdbc:sqlite:smoothiet.db");
         database.init();
 
+        AnnosDao annosDao = new AnnosDao(database);
+        ArrayList<String> annokset = new ArrayList<>();
+
         RaakaAineDao raakaAineDao = new RaakaAineDao(database);
         ArrayList<String> aineet = new ArrayList<>();
 
+        AnnosRaakaAineDao listat = new AnnosRaakaAineDao(database);
+        //AnnosRaakaAine t = listat.findOne(1);
+        //System.out.println("Annos: " + t.getAnnos().getNimi());
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();
-            map.put("viesti", "tervehdys");
-
+            map.put("annokset", annosDao.findAll());
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
 
         get("/raakaaineet", (req, res) -> {
-            HashMap map2 = new HashMap<>();
-            map2.put("raakaaineet", raakaAineDao.findAll());
-            return new ModelAndView(map2, "raakaaineet");
-        }, new ThymeleafTemplateEngine());
-
-        /*Spark.get("/raakaaineet", (req, res) -> {
-            String lisaaAine = "";
-            for (String aine : aineet) {
-                lisaaAine += aine + "<br/>";
-            }
-
-            return lisaaAine
-                    + "<form method=\"POST\" action=\"/lisaaAine\">\n"
-                    + "Raaka-aine:<br/>\n"
-                    + "<input type=\"text\" name=\"raaka-aine\"/><br/>\n"
-                    + "<input type=\"submit\" value=\"Lisää raaka-aine\"/>\n"
-                    + "</form>";
-        });*/
-
-        /*get("/raakaaineet/:id", (req, res) -> {
             HashMap map = new HashMap<>();
-            map.put("raakaaine", raakaAineDao.findOne(Integer.parseInt(req.params("id"))));
+            map.put("raakaaineet", raakaAineDao.findAll());
+            return new ModelAndView(map, "raakaaineet");
+        }, new ThymeleafTemplateEngine());
+        
 
-            return new ModelAndView(map, "raakaaine");
-        }, new ThymeleafTemplateEngine());*/
+        get("/smoothiet/:id", (req, res) -> {
+            HashMap map = new HashMap<>();
+            Integer raakaAineId = Integer.parseInt(req.params(":id"));
+            map.put("smoothie", annosDao.findOne(raakaAineId));
+            map.put("raakaaineet", annosDao.etsiRaakaAineet(raakaAineId));
 
+            return new ModelAndView(map, "smoothie");
+        }, new ThymeleafTemplateEngine());
+        
+        
         Spark.post("/raakaaineet", (req, res) -> {
             RaakaAine aine = new RaakaAine(-1, req.queryParams("nimi"));
             raakaAineDao.saveOrUpdate(aine);
             res.redirect("/raakaaineet");
+            return "";
+        });
+
+        Spark.get("/smoothiet", (req, res) -> {
+            HashMap map = new HashMap<>();
+            map.put("smoothiet", annosDao.findAll());
+            map.put("raakaaineet", raakaAineDao.findAll());
+
+            return new ModelAndView(map, "smoothiet");
+        }, new ThymeleafTemplateEngine());
+
+        Spark.post("/smoothiet", (req, res) -> {
+            Annos annos = new Annos(-1, req.queryParams("nimi"));
+            annosDao.saveOrUpdate(annos);
+
+            res.redirect("/smoothiet");
+            return "";
+        });
+
+        Spark.post("/smoothiet/:id", (req, res) -> {
+            Integer annosId = Integer.parseInt(req.params(":id"));
+            Integer raakaAineId = Integer.parseInt(req.queryParams("raakaaineId"));
+
+            AnnosRaakaAine ta = new AnnosRaakaAine(-1, annosId, raakaAineId, 1,1,"jotain");
+            listat.saveOrUpdate(ta);
+
+            res.redirect("/smoothiet");
             return "";
         });
 
