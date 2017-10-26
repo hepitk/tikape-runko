@@ -40,20 +40,18 @@ public class Main {
             map.put("raakaaineet", raakaAineDao.findAll());
             return new ModelAndView(map, "raakaaineet");
         }, new ThymeleafTemplateEngine());
-        
 
         get("/smoothiet/:id", (req, res) -> {
             HashMap map = new HashMap<>();
             Integer raakaAineId = Integer.parseInt(req.params(":id"));
             map.put("smoothie", annosDao.findOne(raakaAineId));
-            map.put("raakaaineet", annosDao.etsiRaakaAineet(raakaAineId));            
+            map.put("raakaaineet", annosDao.etsiRaakaAineet(raakaAineId));
             map.put("muut", annosRaakaAineDao.etsiAnnosRaakaAineet(raakaAineId));
-            
 
             return new ModelAndView(map, "smoothie");
         }, new ThymeleafTemplateEngine());
-        
-        
+
+
         Spark.post("/raakaaineet", (req, res) -> {
             RaakaAine aine = new RaakaAine(-1, req.queryParams("nimi"));
             raakaAineDao.saveOrUpdate(aine);
@@ -79,9 +77,33 @@ public class Main {
 
         Spark.post("/smoothiet/:id", (req, res) -> {
             Integer annosId = Integer.parseInt(req.params(":id"));
+            String smoothieId = req.queryParams("smoothieId");
             Integer raakaAineId = Integer.parseInt(req.queryParams("raakaaineId"));
+            Integer jarjestysId = Integer.parseInt(req.queryParams("jarjestysId"));
+            String maaraId = req.queryParams("maaraId");
+            String ohjeId = req.queryParams("ohjeId");
 
-            AnnosRaakaAine ta = new AnnosRaakaAine(-1, annosId, raakaAineId, 1,1,"jotain");
+            Annos sa = new Annos(-1, smoothieId);
+            annosDao.saveOrUpdate(sa);
+
+            AnnosRaakaAine ta = new AnnosRaakaAine(-1, annosId, raakaAineId, jarjestysId, maaraId, ohjeId);
+            annosRaakaAineDao.saveOrUpdate(ta);
+
+            res.redirect("/smoothiet");
+            return "";
+        });
+
+        Spark.post("/smoothiet2", (req, res) -> {
+            //Integer annosId = Integer.parseInt(req.params(":id"));
+            Integer smoothieId = Integer.parseInt(req.queryParams("smoothieId"));
+            Integer raakaAineId = Integer.parseInt(req.queryParams("raakaaineId"));
+            Integer jarjestysId = Integer.parseInt(req.queryParams("jarjestysId"));
+            String maaraId = req.queryParams("maaraId");
+            String ohjeId = req.queryParams("ohjeId");
+
+            //Annos sa = new Annos (-1, smoothieId);
+            //annosDao.saveOrUpdate(sa);
+            AnnosRaakaAine ta = new AnnosRaakaAine(-1, smoothieId, raakaAineId, jarjestysId, maaraId, ohjeId);
             annosRaakaAineDao.saveOrUpdate(ta);
 
             res.redirect("/smoothiet");

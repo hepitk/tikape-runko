@@ -1,9 +1,14 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-    <head>
+    <head>        
         <title>Smoothien raaka-aineet</title>
         <meta charset="utf-8" />
+        <style>
+            table, th, td {
+                border: 1px solid black;
+            }
+        </style>
     </head>
 
     <body>
@@ -11,18 +16,27 @@
 
         <h2>Raaka-aineet</h2>
 
-        <ul>
-            <li th:each="raakaaine : ${raakaaineet}">
-                <span th:text="${raakaaine.nimi}">Raaka-aine</span>
-            </li>
-        </ul>
+        <table style="float: left">
+            <tr>
+                <th>Raaka-aine</th>
+            </tr>
+            <tr th:each="raakaaine : ${raakaaineet}">
+                <td th:text="${raakaaine.nimi}">Nimet</td>
+            </tr>
+        </table>
 
-        <ul>
-            <li th:each="muu : ${muut}">
-                <span th:text="${muu.ohje}">Raaka-aine</span>
-            </li>
-        </ul>
-
+        <table style="float: left">
+            <tr>
+                <th>Jarjestys</th>
+                <th>Maara</th>
+                <th>Ohje</th>
+            </tr>
+            <tr th:each="muu : ${muut}">
+                <td th:text="${muu.jarjestys}">Jarjestys</td>
+                <td th:text="${muu.maara}">Maara</td>
+                <td th:text="${muu.ohje}">Ohje</td>
+            </tr>
+        </table>
 
     </body>
 </html>

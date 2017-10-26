@@ -43,7 +43,7 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
         Integer annos = rs.getInt("annos_id");
         Integer raakaAine = rs.getInt("raakaaine_id");
 
-        AnnosRaakaAine t = new AnnosRaakaAine(id, annos, raakaAine, rs.getInt("jarjestys"), rs.getInt("maara"), rs.getString("ohje"));
+        AnnosRaakaAine t = new AnnosRaakaAine(id, annos, raakaAine, rs.getInt("jarjestys"), rs.getString("maara"), rs.getString("ohje"));
 
         rs.close();
         stmt.close();
@@ -86,7 +86,7 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
             stmt.setInt(1, object.getAnnosId());
             stmt.setInt(2, object.getRaakaAineId());
             stmt.setInt(3, object.getJarjestys());
-            stmt.setInt(4, object.getMaara());
+            stmt.setString(4, object.getMaara());
             stmt.setString(5, object.getOhje());
             stmt.executeUpdate();
         }
@@ -143,7 +143,7 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
             ResultSet result = stmt.executeQuery();
 
             while (result.next()) {
-                annosRaakaaineet.add(new AnnosRaakaAine(result.getInt("id"), result.getInt("annos_id"), result.getInt("raakaaine_Id"), result.getInt("jarjestys"), result.getInt("maara"), result.getString("ohje")));                
+                annosRaakaaineet.add(new AnnosRaakaAine(result.getInt("id"), result.getInt("annos_id"), result.getInt("raakaaine_Id"), result.getInt("jarjestys"), result.getString("maara"), result.getString("ohje")));                
             }
         }
 

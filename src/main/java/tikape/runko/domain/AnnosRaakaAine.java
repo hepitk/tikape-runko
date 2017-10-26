@@ -6,10 +6,10 @@ public class AnnosRaakaAine {
     private Integer annosId;
     private Integer raakaAineId;
     private Integer jarjestys;
-    private Integer maara;
+    private String maara;
     private String ohje;
 
-    public AnnosRaakaAine(Integer id, Integer annosId, Integer raakaAineId, Integer jarjestys, Integer maara, String ohje) {
+    public AnnosRaakaAine(Integer id, Integer annosId, Integer raakaAineId, Integer jarjestys, String maara, String ohje) {
         this.id = id;
         this.annosId = annosId;
         this.raakaAineId = raakaAineId;
@@ -50,11 +50,11 @@ public class AnnosRaakaAine {
         this.jarjestys = jarjestys;
     }
 
-    public Integer getMaara() {
+    public String getMaara() {
         return maara;
     }
 
-    public void setMaara(Integer maara) {
+    public void setMaara(String maara) {
         this.maara = maara;
     }
 
