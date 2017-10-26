@@ -1,21 +1,28 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-  <head>
-    <title>Smoothien raaka-aineet</title>
-    <meta charset="utf-8" />
-  </head>
+    <head>
+        <title>Smoothien raaka-aineet</title>
+        <meta charset="utf-8" />
+    </head>
 
-  <body>
-    <h1 th:text="${smoothie.nimi}">Smoothien nimi</h1>
+    <body>
+        <h1 th:text="${smoothie.nimi}">Smoothien nimi</h1>
 
-    <h2>Raaka-aineet</h2>
-    
-    <ul>
-      <li th:each="raakaaine : ${raakaaineet}">
-        <span th:text="${raakaaine.nimi}">Raaka-aine</span>
-      </li>
-    </ul>
+        <h2>Raaka-aineet</h2>
 
-  </body>
+        <ul>
+            <li th:each="raakaaine : ${raakaaineet}">
+                <span th:text="${raakaaine.nimi}">Raaka-aine</span>
+            </li>
+        </ul>
+
+        <ul>
+            <li th:each="muu : ${muut}">
+                <span th:text="${muu.ohje}">Raaka-aine</span>
+            </li>
+        </ul>
+
+
+    </body>
 </html>

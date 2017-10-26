@@ -26,7 +26,7 @@ public class Main {
         RaakaAineDao raakaAineDao = new RaakaAineDao(database);
         ArrayList<String> aineet = new ArrayList<>();
 
-        AnnosRaakaAineDao listat = new AnnosRaakaAineDao(database);
+        AnnosRaakaAineDao annosRaakaAineDao = new AnnosRaakaAineDao(database);
         //AnnosRaakaAine t = listat.findOne(1);
         //System.out.println("Annos: " + t.getAnnos().getNimi());
         get("/", (req, res) -> {
@@ -46,7 +46,9 @@ public class Main {
             HashMap map = new HashMap<>();
             Integer raakaAineId = Integer.parseInt(req.params(":id"));
             map.put("smoothie", annosDao.findOne(raakaAineId));
-            map.put("raakaaineet", annosDao.etsiRaakaAineet(raakaAineId));
+            map.put("raakaaineet", annosDao.etsiRaakaAineet(raakaAineId));            
+            map.put("muut", annosRaakaAineDao.etsiAnnosRaakaAineet(raakaAineId));
+            
 
             return new ModelAndView(map, "smoothie");
         }, new ThymeleafTemplateEngine());
@@ -80,7 +82,7 @@ public class Main {
             Integer raakaAineId = Integer.parseInt(req.queryParams("raakaaineId"));
 
             AnnosRaakaAine ta = new AnnosRaakaAine(-1, annosId, raakaAineId, 1,1,"jotain");
-            listat.saveOrUpdate(ta);
+            annosRaakaAineDao.saveOrUpdate(ta);
 
             res.redirect("/smoothiet");
             return "";
