@@ -103,10 +103,16 @@ public class AnnosDao implements Dao<Annos, Integer> {
 
     @Override
     public void delete(Integer key) throws SQLException {
-        // ei toteutettu
+        Connection conn = database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM Annos WHERE id = ?");
+
+        stmt.setInt(1, key);
+        stmt.executeUpdate();
+
     }
 
-    public List<RaakaAine> etsiRaakaAineet(Integer raakaAineId) throws SQLException {
+//Etsii ja palauttaa annokseen liittyvat raaka-aineet
+    public List<RaakaAine> etsiRaakaAineet(Integer annosId) throws SQLException {
         String query = "SELECT RaakaAine.id, RaakaAine.nimi FROM RaakaAine, AnnosRaakaAine\n"
                 + "              WHERE RaakaAine.id = AnnosRaakaAine.raakaaine_id "
                 + "                  AND AnnosRaakaAine.annos_id = ?";
@@ -115,7 +121,7 @@ public class AnnosDao implements Dao<Annos, Integer> {
 
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setInt(1, raakaAineId);
+            stmt.setInt(1, annosId);
             ResultSet result = stmt.executeQuery();
 
             while (result.next()) {

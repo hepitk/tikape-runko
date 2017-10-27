@@ -12,15 +12,18 @@
         <ul>
             <li th:each="smoothie : ${smoothiet}">
                 <a th:href="@{~/smoothiet/{id}(id=${smoothie.id})}">
-                    <span th:text="${smoothie.nimi}">Smoothie</span>
-                </a>              
+                    <span th:text="${smoothie.nimi}">Smoothie</span></a>
+                <form method="POST" action="/poistaAnnos">
+                    <input name="poistaAnnosId"/>
+                    <input type="submit" value="Poista"/>
+                </form>
             </li>
         </ul>
 
         <h2>Uusi smoothie</h2>        
 
         <form method="POST" action="/smoothiet">
-            <input type="text" name="nimi"/><br/>
+            <input type="text" name="nimi"/><br/><br/>
             <input type="submit" value="Luo smoothie"/>
         </form>
 
@@ -45,9 +48,10 @@
             Maara:<br/>
             <input type="text" name="maaraId"/><br/>
             Ohje:<br/>
-            <input type="text" name="ohjeId"/><br/>
+            <input type="text" name="ohjeId"/><br/><br/>
 
             <input type="submit" value="Lisaa raaka-aine"/>
-        </form>
+        </form><br/>
+        <a href="/">Takaisin smoothielistaukseen</a>
     </body>
 </html>

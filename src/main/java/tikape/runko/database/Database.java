@@ -47,8 +47,7 @@ public class Database {
         lista.add("INSERT INTO RaakaAine (nimi) VALUES ('Mustikka');");
         lista.add("INSERT INTO Annos (nimi) VALUES ('Makee');");
         lista.add("INSERT INTO Annos (nimi) VALUES ('Huono');");
-        lista.add("INSERT INTO Annos (nimi) VALUES ('Hyoky');");
-        //lista.add("INSERT INTO AnnosRaakaAine (annos_id, raakaaine_id, jarjestys, maara, ohje) VALUES (1,1,1,1,'sekoita');");
+        lista.add("INSERT INTO Annos (nimi) VALUES ('Hyoky');");       
 
         return lista;
     }

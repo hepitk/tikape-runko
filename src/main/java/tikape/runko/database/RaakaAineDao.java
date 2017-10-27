@@ -85,8 +85,8 @@ public class RaakaAineDao implements Dao<RaakaAine, Integer> {
 
         return findByName(object.getNimi());
     }
-    
-        private RaakaAine findByName(String nimi) throws SQLException {
+
+    private RaakaAine findByName(String nimi) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT id, nimi FROM RaakaAine WHERE nimi = ?");
             stmt.setString(1, nimi);
@@ -102,7 +102,14 @@ public class RaakaAineDao implements Dao<RaakaAine, Integer> {
 
     @Override
     public void delete(Integer key) throws SQLException {
-        // ei toteutettu
+        Connection conn = database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM RaakaAine WHERE id = ?");
+
+        stmt.setInt(1, key);
+        stmt.executeUpdate();
+
+        stmt.close();
+        conn.close();
     }
 
 }

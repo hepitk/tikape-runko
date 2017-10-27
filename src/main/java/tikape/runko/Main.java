@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import spark.ModelAndView;
 import spark.Spark;
-import static spark.Spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import tikape.runko.database.AnnosDao;
 import tikape.runko.database.Database;
@@ -27,37 +26,18 @@ public class Main {
         ArrayList<String> aineet = new ArrayList<>();
 
         AnnosRaakaAineDao annosRaakaAineDao = new AnnosRaakaAineDao(database);
-        //AnnosRaakaAine t = listat.findOne(1);
-        //System.out.println("Annos: " + t.getAnnos().getNimi());
-        get("/", (req, res) -> {
+
+        Spark.get("/", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("annokset", annosDao.findAll());
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
 
-        get("/raakaaineet", (req, res) -> {
+        Spark.get("/raakaaineet", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("raakaaineet", raakaAineDao.findAll());
             return new ModelAndView(map, "raakaaineet");
         }, new ThymeleafTemplateEngine());
-
-        get("/smoothiet/:id", (req, res) -> {
-            HashMap map = new HashMap<>();
-            Integer raakaAineId = Integer.parseInt(req.params(":id"));
-            map.put("smoothie", annosDao.findOne(raakaAineId));
-            map.put("raakaaineet", annosDao.etsiRaakaAineet(raakaAineId));
-            map.put("muut", annosRaakaAineDao.etsiAnnosRaakaAineet(raakaAineId));
-
-            return new ModelAndView(map, "smoothie");
-        }, new ThymeleafTemplateEngine());
-
-
-        Spark.post("/raakaaineet", (req, res) -> {
-            RaakaAine aine = new RaakaAine(-1, req.queryParams("nimi"));
-            raakaAineDao.saveOrUpdate(aine);
-            res.redirect("/raakaaineet");
-            return "";
-        });
 
         Spark.get("/smoothiet", (req, res) -> {
             HashMap map = new HashMap<>();
@@ -67,6 +47,23 @@ public class Main {
             return new ModelAndView(map, "smoothiet");
         }, new ThymeleafTemplateEngine());
 
+        Spark.get("/smoothiet/:id", (req, res) -> {
+            HashMap map = new HashMap<>();
+            Integer raakaAineId = Integer.parseInt(req.params(":id"));
+            map.put("smoothie", annosDao.findOne(raakaAineId));
+            map.put("raakaaineet", annosDao.etsiRaakaAineet(raakaAineId));
+            map.put("muut", annosRaakaAineDao.etsiAnnosRaakaAineet(raakaAineId));
+
+            return new ModelAndView(map, "smoothie");
+        }, new ThymeleafTemplateEngine());
+
+        Spark.post("/raakaaineet", (req, res) -> {
+            RaakaAine aine = new RaakaAine(-1, req.queryParams("nimi"));
+            raakaAineDao.saveOrUpdate(aine);
+            res.redirect("/raakaaineet");
+            return "";
+        });
+
         Spark.post("/smoothiet", (req, res) -> {
             Annos annos = new Annos(-1, req.queryParams("nimi"));
             annosDao.saveOrUpdate(annos);
@@ -75,38 +72,36 @@ public class Main {
             return "";
         });
 
-        Spark.post("/smoothiet/:id", (req, res) -> {
-            Integer annosId = Integer.parseInt(req.params(":id"));
-            String smoothieId = req.queryParams("smoothieId");
-            Integer raakaAineId = Integer.parseInt(req.queryParams("raakaaineId"));
-            Integer jarjestysId = Integer.parseInt(req.queryParams("jarjestysId"));
-            String maaraId = req.queryParams("maaraId");
-            String ohjeId = req.queryParams("ohjeId");
-
-            Annos sa = new Annos(-1, smoothieId);
-            annosDao.saveOrUpdate(sa);
-
-            AnnosRaakaAine ta = new AnnosRaakaAine(-1, annosId, raakaAineId, jarjestysId, maaraId, ohjeId);
-            annosRaakaAineDao.saveOrUpdate(ta);
-
-            res.redirect("/smoothiet");
-            return "";
-        });
-
+        // Muokkaa smoothien reseptin eli muokkaa liitostaulua
         Spark.post("/smoothiet2", (req, res) -> {
-            //Integer annosId = Integer.parseInt(req.params(":id"));
             Integer smoothieId = Integer.parseInt(req.queryParams("smoothieId"));
             Integer raakaAineId = Integer.parseInt(req.queryParams("raakaaineId"));
             Integer jarjestysId = Integer.parseInt(req.queryParams("jarjestysId"));
             String maaraId = req.queryParams("maaraId");
             String ohjeId = req.queryParams("ohjeId");
 
-            //Annos sa = new Annos (-1, smoothieId);
-            //annosDao.saveOrUpdate(sa);
             AnnosRaakaAine ta = new AnnosRaakaAine(-1, smoothieId, raakaAineId, jarjestysId, maaraId, ohjeId);
             annosRaakaAineDao.saveOrUpdate(ta);
 
             res.redirect("/smoothiet");
+            return "";
+        });
+
+        // Poistaa smoothien
+        Spark.post("/poistaAnnos", (req, res) -> {
+            Integer poistaAnnosId = Integer.parseInt(req.queryParams("poistaAnnosId"));
+            annosDao.delete(poistaAnnosId);
+
+            res.redirect("/smoothiet");
+            return "";
+        });
+
+        // Poistaa raaka-aineen
+        Spark.post("/poistaRaakaAine/:id", (req, res) -> {
+            Integer raakaAineId = Integer.parseInt(req.params(":id"));
+            raakaAineDao.delete(raakaAineId);
+
+            res.redirect("/raakaaineet");
             return "";
         });
 
