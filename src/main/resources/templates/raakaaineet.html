@@ -11,7 +11,11 @@
 
         <ul>
             <li th:each="raakaaine: ${raakaaineet}">
-                <span th:text="${raakaaine.nimi}">Raaka-aineen nimi</span>
+                <big><span th:text="${raakaaine.nimi}">Raaka-aineen nimi</span></big>
+                <form method="POST" action="/poistaRaakaAine">
+                    <input type="hidden" name="poistaRaakaAineId" th:value="${raakaaine.id}"/>
+                    <input type="submit" value="Poista"/>
+                </form>
             </li>
         </ul>
 
@@ -21,6 +25,6 @@
             <input type="text" name="nimi"/><br/><br/>
             <input type="submit" value="Luo"/>
         </form><br/>   
-        <a href="smoothiet.html">Takaisin smoothielistaukseen</a>
-</body>
+        <a href="/">Takaisin smoothielistaukseen</a>
+    </body>
 </html>

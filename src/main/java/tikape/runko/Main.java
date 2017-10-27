@@ -72,7 +72,7 @@ public class Main {
             return "";
         });
 
-        // Muokkaa smoothien reseptin eli muokkaa liitostaulua
+        // Muokkaa smoothien reseptin
         Spark.post("/smoothiet2", (req, res) -> {
             Integer smoothieId = Integer.parseInt(req.queryParams("smoothieId"));
             Integer raakaAineId = Integer.parseInt(req.queryParams("raakaaineId"));
@@ -97,9 +97,9 @@ public class Main {
         });
 
         // Poistaa raaka-aineen
-        Spark.post("/poistaRaakaAine/:id", (req, res) -> {
-            Integer raakaAineId = Integer.parseInt(req.params(":id"));
-            raakaAineDao.delete(raakaAineId);
+        Spark.post("/poistaRaakaAine", (req, res) -> {
+            Integer poistaRaakaAineId = Integer.parseInt(req.queryParams("poistaRaakaAineId"));
+            raakaAineDao.delete(poistaRaakaAineId);
 
             res.redirect("/raakaaineet");
             return "";

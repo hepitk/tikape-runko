@@ -11,10 +11,10 @@
 
         <ul>
             <li th:each="smoothie : ${smoothiet}">
-                <a th:href="@{~/smoothiet/{id}(id=${smoothie.id})}">
-                    <span th:text="${smoothie.nimi}">Smoothie</span></a>
+                <big><a th:href="@{~/smoothiet/{id}(id=${smoothie.id})}">
+                        <span th:text="${smoothie.nimi}">Smoothie</span></a></big>
                 <form method="POST" action="/poistaAnnos">
-                    <input name="poistaAnnosId"/>
+                    <input type="hidden" name="poistaAnnosId" th:value="${smoothie.id}"/>
                     <input type="submit" value="Poista"/>
                 </form>
             </li>

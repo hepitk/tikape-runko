@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tikape.runko.database;
 
 import java.sql.Connection;
@@ -49,12 +44,12 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
     @Override
     public List<AnnosRaakaAine> findAll() throws SQLException {
         //ei toteutettu        
-        return null;        
+        return null;
     }
 
     @Override
     public AnnosRaakaAine saveOrUpdate(AnnosRaakaAine object) throws SQLException {
-          try (Connection conn = database.getConnection()) {
+        try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO AnnosRaakaAine (annos_id, raakaaine_id, jarjestys,maara,ohje) VALUES (?, ?, ?, ?, ?)");
             stmt.setInt(1, object.getAnnosId());
             stmt.setInt(2, object.getRaakaAineId());
@@ -66,20 +61,18 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
 
         return null;
     }
-    
-    
+
     @Override
     public void delete(Integer key) throws SQLException {
         // ei toteutettu
     }
-    
+
     // Etsii ja palauttaa tietyn annoksen ja raaka-aineen yhdistavan liitostaulun tiedot
     public List<AnnosRaakaAine> etsiAnnosRaakaAineet(Integer annosRaakaAineId) throws SQLException {
         String query = "SELECT AnnosRaakaAine.id, AnnosRaakaAine.annos_id, AnnosRaakaAine.raakaaine_id, AnnosRaakaAine.jarjestys, AnnosRaakaAine.maara, AnnosRaakaAine.ohje FROM AnnosRaakaAine\n"
-                + "              WHERE AnnosRaakaAine.annos_id = ?";                
+                + "              WHERE AnnosRaakaAine.annos_id = ?";
 
         List<AnnosRaakaAine> annosRaakaaineet = new ArrayList<>();
-        
 
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -87,7 +80,7 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
             ResultSet result = stmt.executeQuery();
 
             while (result.next()) {
-                annosRaakaaineet.add(new AnnosRaakaAine(result.getInt("id"), result.getInt("annos_id"), result.getInt("raakaaine_Id"), result.getInt("jarjestys"), result.getString("maara"), result.getString("ohje")));                
+                annosRaakaaineet.add(new AnnosRaakaAine(result.getInt("id"), result.getInt("annos_id"), result.getInt("raakaaine_Id"), result.getInt("jarjestys"), result.getString("maara"), result.getString("ohje")));
             }
         }
 

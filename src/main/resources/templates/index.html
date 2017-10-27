@@ -11,9 +11,9 @@
 
         <ul>
             <li th:each="annos: ${annokset}">
-                <a th:href="@{~/smoothiet/{id}(id=${annos.id})}">
-                <span th:text="${annos.nimi}">Smoothien nimi</span>
-                </a>
+                <big><a th:href="@{~/smoothiet/{id}(id=${annos.id})}">
+                        <span th:text="${annos.nimi}">Smoothien nimi</span>
+                    </a></big>
             </li>
         </ul>
 
@@ -26,7 +26,7 @@
         </ul>
 
         <p><a href="/smoothiet">Luo uusi smoothie</a></p>
-        <p><a href="/">Tarkastele ja muokkaa raaka-aineita</a></p>
+        <p><a href="/raakaaineet">Tarkastele ja muokkaa raaka-aineita</a></p>
 
     </body>
 </html>
